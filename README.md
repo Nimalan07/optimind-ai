@@ -1,8 +1,6 @@
 # OptiMind AI
 
-<p align="center">
-  <img src="frontend/public/logo.png" alt="OptiMind AI Logo" width="320" />
-</p>
+**Author:** NIMALAN MANI M
 
 ## 📝 Short Description
 
@@ -198,15 +196,7 @@ Upon activation, the pipeline runs sequentially through stages:
 
 ---
 
-## 📸 Screenshots
 
-### Logo Branding
-![Logo Banner](frontend/public/logo.png)
-
-### Dashboard Interface
-*The workspace presents a clean, glassmorphic layout displaying telemetry side-by-side with optimization execution status.*
-
----
 
 ## 🗺️ Roadmap
 
@@ -215,8 +205,4 @@ Upon activation, the pipeline runs sequentially through stages:
 - [ ] Connect with local physical hardware profiling agents (e.g. Raspberry Pi clusters, on-prem ARM nodes).
 - [ ] Add global multi-region cloud pricing trackers for live spot-instance cost mitigation.
 
----
 
-## 📄 License
-
-This project is licensed under the **MIT License**. See the LICENSE file for details.
