@@ -176,6 +176,21 @@ Upon activation, the pipeline runs sequentially through stages:
    * View live pipeline stages in the console UI (or click **Cancel Optimization** to abort the run).
    * Review benchmark comparison charts and download your **PDF Report** or **Deployment Package**.
 
+### 🐳 Production Deployment (Docker Compose)
+For production environments, you can run the entire platform (Frontend + Backend) inside containers:
+1. Ensure **Docker** and **Docker Compose** are installed.
+2. Build and start the services in detached mode:
+   ```bash
+   docker-compose up --build -d
+   ```
+3. Access the services:
+   * **Frontend UI**: `http://localhost:3000`
+   * **Backend API**: `http://localhost:8000`
+4. To stop the services:
+   ```bash
+   docker-compose down
+   ```
+
 ---
 
 ## 📡 API Reference
