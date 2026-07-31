@@ -144,18 +144,31 @@ The final stage of the pipeline generates standard enterprise deployment files:
 ```text
 ├── backend/
 │   ├── app/
-│   │   ├── api/            # API endpoints (models, pipeline, reports, cloud)
-│   │   ├── benchmark/      # Memory, latency, throughput measurement suites
-│   │   ├── deployment/     # Container & orchestrator code generators
-│   │   ├── download/       # HF Hub downloader strategy and profiles
-│   │   ├── pipeline/       # Optimization multi-stage pipeline state machine
-│   │   └── recommendation/ # Backend and cloud recommender systems
-│   └── main.py
+│   │   ├── api/                # REST endpoints (pipeline execution, report generation, system health)
+│   │   ├── benchmark/          # Performance suites (latency, throughput, memory measurement models)
+│   │   ├── deployment/         # Template generators (Dockerfile, Docker Compose, Kubernetes, Nginx configuration)
+│   │   ├── download/           # HF Hub Downloader (fast-metadata and complete weights downloads)
+│   │   ├── hardware/           # Hardware profile detectors (ARM architecture, OS, RAM features)
+│   │   ├── pipeline/           # State Machine execution (stages: download, inspect, recommend, optimize, benchmark, deploy, report)
+│   │   ├── recommendation/     # AI Recommenders (heuristic models matching parameters to runtime and cloud instances)
+│   │   ├── reports/            # PDF and HTML report generators (charts, cost summaries)
+│   │   ├── services/           # Shared backend services (Download, Recommendation, Pipeline coordinators)
+│   │   └── main.py             # FastAPI App router configuration
+│   └── requirements.txt        # Backend dependencies
 ├── frontend/
+│   ├── public/                 # Static assets (site logo, SVGs)
 │   ├── src/
-│   │   ├── app/            # Next.js workspace routing (models, optimize, benchmark, reports)
-│   │   ├── components/     # UI layouts (Navbar, Sidebar, shadcn Cards/Buttons)
-│   │   └── services/       # API clients
-│   └── package.json
-└── .gitignore              # Main project git exclusion list
+│   │   ├── app/                # Next.js 15 pages and app router layout
+│   │   │   ├── workspace/      # Optimization Workspace (Model selection, Pipeline console, Benchmark tables, Reports view)
+│   │   │   ├── history/        # Previous optimization logs and audit trails
+│   │   │   ├── about/          # Platform specs & versions
+│   │   │   ├── globals.css     # Global styles & tailwind themes
+│   │   │   └── layout.tsx      # Main layout component (Navbar and view containers)
+│   │   ├── components/         # Reusable layouts and custom views
+│   │   │   ├── layout/         # Shared structure (Navbar, Sidebar)
+│   │   │   └── ui/             # Pre-styled Base UI elements (Shadcn cards, inputs, buttons, tables)
+│   │   └── services/           # Axios/Fetch API client hooks
+│   ├── package.json            # Frontend dependencies
+│   └── tsconfig.json           # TypeScript configuration
+└── .gitignore                  # Monorepo build and binary exclusion file
 ```
