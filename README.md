@@ -1,116 +1,14 @@
 # OptiMind AI (Cloud AI Platform)
 
-Welcome to **OptiMind AI**, a production-grade, agentic developer platform built to inspect, profile, recommend, optimize, and bundle AI models for deployment on modern Arm-based Cloud CPU architectures (such as **AWS Graviton**, **Microsoft Cobalt 100**, and **Google Cloud Axion**).
+Welcome to **OptiMind AI**, an agentic developer platform built to inspect, profile, recommend, optimize, and bundle AI models for deployment on modern Arm-based Cloud CPU architectures (such as **AWS Graviton**, **Microsoft Cobalt 100**, and **Google Cloud Axion**).
 
-The application acts as an end-to-end sandbox enabling developers to compile models (e.g., Llama, Phi, Gemma, BERT) to high-performance runtimes (ONNX Runtime, Llama.cpp) with dynamic quantization, analyze cost-efficiency metrics, and instantly generate production-ready cloud deployment packages.
-
----
-
-## 📂 Detailed Folder Structure
-
-Here is the complete file and folder architecture of the OptiMind AI monorepo:
-
-```text
-optimised/
-├── backend/
-│   ├── app/
-│   │   ├── api/                      # REST API Endpoint Routers
-│   │   │   ├── agent.py              # Natural language agent optimization triggers
-│   │   │   ├── artifacts.py          # Serves HTML sheets and deployment ZIP packages
-│   │   │   ├── benchmark.py          # Hardware benchmarking endpoints
-│   │   │   ├── cloud.py              # Cloud instance recommendation endpoint
-│   │   │   ├── deployment.py         # Deployment configuration generation endpoints
-│   │   │   ├── hardware.py           # On-prem CPU/GPU detection endpoint
-│   │   │   ├── jobs.py               # Background job tracking and registry
-│   │   │   ├── models.py             # Popular models and search endpoints
-│   │   │   ├── optimization.py       # Quantization configurations endpoints
-│   │   │   ├── recommendation.py     # Unified backend, hardware, and cost recommendation
-│   │   │   ├── reports.py            # Latency speedup PDF/HTML report generators
-│   │   │   └── system.py             # Root message and health check endpoint
-│   │   ├── benchmark/                # Telemetry & Performance Suites
-│   │   │   ├── benchmark_runner.py   # Simulates model-aware latency/throughput/RSS metrics
-│   │   │   ├── benchmark_service.py  # Coordinates benchmark execution jobs
-│   │   │   ├── comparison.py         # Calculates delta improvements between runs
-│   │   │   ├── latency.py            # Local latency measurement logic
-│   │   │   ├── memory.py             # RSS/VMS memory usage monitors
-│   │   │   ├── model_size.py         # Inspects physical storage footprints of weights
-│   │   │   ├── throughput.py         # Computes tokens/sec and request throughput rates
-│   │   │   └── utils.py              # Telemetry helper utilities
-│   │   ├── cloud/                    # Cloud Catalog & Selection
-│   │   │   ├── cloud_catalog.py      # Database of AWS Graviton, Azure Cobalt, & GCP Axion VMs
-│   │   │   ├── cloud_service.py      # Instance query service
-│   │   │   ├── deployment_estimator.py# Estimates scale, threads, and container limits
-│   │   │   ├── instance_selector.py  # Maps model specifications to optimal VM sizes
-│   │   │   └── provider_ranker.py    # Ranks AWS, GCP, and Azure by efficiency/cost
-│   │   ├── deployment/               # Cloud Infrastructure Codegen
-│   │   │   ├── compose_generator.py  # Builds compose stacks with server and nginx containers
-│   │   │   ├── deployment_service.py # Compiles configs and zips the deployment assets
-│   │   │   ├── docker_generator.py   # Generates Arm64-optimized Dockerfiles
-│   │   │   ├── kubernetes_generator.py# Generates Kubernetes deployment and service YAMLs
-│   │   │   ├── nginx_generator.py    # Builds Nginx reverse-proxy load balancers
-│   │   │   ├── startup_generator.py  # Generates bash script setup scripts for VMs
-│   │   │   └── templates.py          # Asset base templates
-│   │   ├── download/                 # Model Ingestion Strategy
-│   │   │   ├── downloader.py         # Hugging Face model downloader (full vs config-only)
-│   │   │   ├── profiles.py           # Pattern filters (ONNX, PyTorch, Llama.cpp)
-│   │   │   └── strategy.py           # Decides which files to fetch based on backend
-│   │   ├── pipeline/                 # Stage-Based Orchestrator
-│   │   │   ├── pipeline.py           # Runs the optimization pipeline state machine
-│   │   │   ├── pipeline_context.py   # Stores metadata, model paths, and logs
-│   │   │   ├── pipeline_result.py    # Data structure returning optimization records
-│   │   │   ├── pipeline_service.py   # Spawns background worker tasks
-│   │   │   └── stages/               # Individual Pipeline Steps
-│   │   │       ├── benchmark_stage.py   # Benchmarks base vs optimized models
-│   │   │       ├── deployment_stage.py  # Generates deployment packages
-│   │   │       ├── download_stage.py    # Fetches model files from HF Hub
-│   │   │       ├── inspection_stage.py  # Parses architecture, layer counts, and heads
-│   │   │       ├── optimization_stage.py# Triggers optimum-cli compilation/quantization
-│   │   │       ├── recommendation_stage.# Resolves cloud VM sizing and configurations
-│   │   │       └── report_stage.py      # Generates output PDF/HTML documents
-│   │   ├── recommendation/           # AI Decision Engines
-│   │   │   ├── backend_recommender.py# Recommends ONNX Runtime or Llama.cpp
-│   │   │   ├── cloud_recommender.py  # Matches runtime with AWS/Azure/GCP VMs
-│   │   │   ├── hardware_recommender.py# Detects local processor features
-│   │   │   └── optimization_planner.py# Plans quantization levels (INT4/INT8/FP16)
-│   │   └── reports/                  # Report Compilation Services
-│   │       ├── charts.py             # Generates telemetry bar charts in base64
-│   │       ├── html_generator.py     # Generates interactive HTML report sheets
-│   │       └── pdf_generator.py      # Compiles ReportLab PDF documents with charts
-│   └── main.py                       # FastAPI application entryway
-├── frontend/
-│   ├── public/                       # Static Website Assets
-│   │   ├── favicon.svg               # Scalable logo used as tab favicon
-│   │   └── logo.png                  # Original logo with branding text
-│   ├── src/
-│   │   ├── app/                      # Next.js App Router Page Layouts
-│   │   │   ├── about/                # Product details and version information
-│   │   │   ├── history/              # View logs of past runs
-│   │   │   ├── settings/             # Environment variables and API token configuration
-│   │   │   ├── workspace/            # Application Workspace Pages
-│   │   │   │   ├── benchmark/        # Performance charts, tables, and CSV exports
-│   │   │   │   ├── models/           # Model search, preloaded selection, and query page
-│   │   │   │   ├── optimize/         # Optimization configs, recommendations, and execution
-│   │   │   │   └── report/           # Download PDF/ZIP and preview HTML reports
-│   │   │   ├── globals.css           # Global CSS variables & Tailwind directives
-│   │   │   ├── icon.svg              # Tab icon reference
-│   │   │   └── layout.tsx            # Root HTML layout with title metadata
-│   │   ├── components/               # Shareable Layout components
-│   │   │   └── layout/
-│   │   │       ├── Navbar.tsx        # Branded header with logo & gradient typography
-│   │   │       └── Sidebar.tsx       # Sidebar navigation for Workspace pages
-│   │   ├── services/
-│   │   │   └── api.ts                # API client configuration pointing to Backend
-│   │   ├── components.json           # Tailwind shadcn configurations
-│   │   ├── package.json              # Frontend package registry
-│   │   └── tsconfig.json             # TypeScript compiler rules
-└── .gitignore                        # Root gitignore excluding caches and model weights
-```
+This platform acts as an end-to-end sandbox enabling developers to compile models (e.g., Llama, Phi, Gemma, BERT) to high-performance runtimes (ONNX Runtime, Llama.cpp) with dynamic quantization, analyze cost-efficiency metrics, and instantly generate production-ready cloud deployment packages.
 
 ---
 
 ## 🚀 Key Features
 
-### 1. Lazy-Ingestion Model Selection
+### 1. Zero-Lag Model Selection & Inspection
 * Search and load any Hugging Face Repository instantly.
 * **Metadata Lazy-Loading**: Recommendations fetch only the `config.json` header (taking milliseconds and using <2KB) to identify attention heads, layers, and architectures. Heavy model weights are deferred to the actual compilation stage to preserve system memory and network bandwidth.
 
@@ -123,10 +21,7 @@ optimised/
 * Features dynamic benchmarking simulations scaled realistically according to parameter sizes and runtime engines. 
 * Reflects realistic RAM savings (up to 75% for LLM INT4 quantization) and speedups (2x - 4x) with built-in model-specific variance.
 
-### 4. Interactive Cancel Button
-* Includes a fully functional **Cancel Optimization** button in the workspace UI that cleanly aborts active fetch requests mid-flight and safely halts the pipeline without runtime crashes.
-
-### 5. Bypassed Native Download Packages
+### 4. Bypassed Native Download Packages
 * Replaced programmatic Javascript links with native standard HTML anchors styled via shadcn/base-ui `buttonVariants`.
 * **Download PDF Report**: Generates a detailed audit of latency speedups and architecture details.
 * **Download Deployment ZIP**: Automatically bundles containerized deployment assets:
@@ -135,6 +30,52 @@ optimised/
   - `nginx.conf` configured for request reverse-proxying.
   - Kubernetes `deployment.yaml` and `service.yaml` manifests for hosting.
 * **Open HTML Report**: Opens a clean, responsive layout of the report inside a new tab.
+
+---
+
+## 🔍 How it Works (Under the Hood)
+
+OptiMind AI coordinates multiple backend services to analyze, optimize, benchmark, and deploy models. Here is a breakdown of the core workflows:
+
+### 1. Lazy-Loading Model Inspection
+When you query or select a model on the dashboard, the backend avoids downloading gigabytes of model weights:
+1. **`DownloadService.download_config_only`** is called. It uses Hugging Face's `hf_hub_download` to fetch **only** the `config.json` file.
+2. **`ModelIntelligence.inspect`** parses the `config.json` file to identify structural features:
+   - Attention heads, hidden layers, activation functions, and vocabulary size.
+   - It computes an `estimated_parameters_billion` field from the hidden layer dimensions.
+3. This allows the UI to display model metadata and run recommendations instantly without consuming network bandwidth or causing local system lag.
+
+### 2. Heuristics & Recommender Engine
+Once model metadata is parsed, the recommender calculates the best hardware and backend:
+* **Backend Recommendation**: Recommends **ONNX Runtime** for classifier/encoder models (like BERT, RoBERTa) and **Llama.cpp** (using GGUF format) for autoregressive LLMs (like Llama, Phi, Gemma).
+* **Cloud VM Selection**: Calculates the RAM requirements based on model size. It matches smaller models (<4B parameters) to 4-core, 16GB Arm VMs (AWS `c8g.large`, Azure `Standard_D4ps_v6`, GCP `t2a-standard-4`) and scales up to larger VMs for heavier models.
+* **Cost Estimation**: Estimates monthly run-rates based on public on-demand pricing and compares it with comparable x86 instances to show average monthly savings.
+
+### 3. The Multi-Stage Optimization Pipeline
+When you click **Start Optimization**, the `PipelineService` executes a sequential state machine:
+```mermaid
+graph TD
+    A[Download Stage: Fetch Weights] --> B[Inspection Stage: Verify Layout]
+    B --> C[Recommendation Stage: Match Backend & VM]
+    C --> D[Optimization Stage: Quantization & ONNX Export]
+    D --> E[Benchmark Stage: Profile Performance]
+    E --> F[Deployment Stage: Generate Manifests]
+    F --> G[Report Stage: Compile PDF & HTML]
+```
+* **Fail-Safe Fallback**: If the Hugging Face weights download fails or is gated, the pipeline automatically shifts to **simulated optimization mode**, completing the pipeline and outputting configuration packages without throwing crash errors.
+* **User Cancellation**: Staged via an `AbortController` on the frontend, users can cancel the execution at any time, terminating the HTTP connection and clearing the progress trackers.
+
+### 4. Dynamic Model-Aware Benchmarking
+Rather than using static mock numbers, the benchmarking engine (`BenchmarkRunner.generate_dynamic_results`) generates realistic performance metrics:
+* **Baseline Speed & Memory**: Scales based on parameter size (e.g. a 3B parameter model starts with a larger memory footprint and latency than a 110M parameter encoder model).
+* **Framework Speedups**: ONNX Runtime and Llama.cpp optimization multipliers are applied to latency and throughput (e.g., Llama.cpp with 4-bit quantization yields a ~75% reduction in memory and a ~3x speedup).
+* **Deterministic Jitter**: Uses a hashing function on the `model_id` to apply realistic, unique performance variations so that distinct models display different numbers.
+
+### 5. Automated Deployment Generators
+The final stage of the pipeline generates standard enterprise deployment files:
+* **Dockerfile**: Sets up an Arm-compatible base image (e.g., using `ubuntu` or framework CPU wheels) configured for optimum CPU instruction sets.
+* **Docker Compose**: Wires the FastAPI inference container alongside a pre-configured Nginx load balancer.
+* **Kubernetes Manifests**: Includes `deployment.yaml` and `service.yaml` configured to scale pods horizontally across cloud Arm node pools.
 
 ---
 
@@ -147,7 +88,7 @@ optimised/
 
 ### Backend (FastAPI)
 * **Framework**: FastAPI (Python 3.13), Uvicorn.
-* **Libraries**: Hugging Face Hub (downloader/exporter), Optimum, Pydantic, ReportLab.
+* **Libraries**: Hugging Face Hub (downloader/exporter), Optimum, Pydantic.
 * **Telemetry**: Native profiling, memory measurement, and performance estimation.
 
 ---
@@ -195,3 +136,26 @@ optimised/
    npm run dev
    ```
    *The frontend dashboard will load at `http://localhost:3000`.*
+
+---
+
+## 📂 Repository Layout
+
+```text
+├── backend/
+│   ├── app/
+│   │   ├── api/            # API endpoints (models, pipeline, reports, cloud)
+│   │   ├── benchmark/      # Memory, latency, throughput measurement suites
+│   │   ├── deployment/     # Container & orchestrator code generators
+│   │   ├── download/       # HF Hub downloader strategy and profiles
+│   │   ├── pipeline/       # Optimization multi-stage pipeline state machine
+│   │   └── recommendation/ # Backend and cloud recommender systems
+│   └── main.py
+├── frontend/
+│   ├── src/
+│   │   ├── app/            # Next.js workspace routing (models, optimize, benchmark, reports)
+│   │   ├── components/     # UI layouts (Navbar, Sidebar, shadcn Cards/Buttons)
+│   │   └── services/       # API clients
+│   └── package.json
+└── .gitignore              # Main project git exclusion list
+```
