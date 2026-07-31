@@ -1,0 +1,1 @@
+# deployment assets generation package
