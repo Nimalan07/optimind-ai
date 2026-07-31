@@ -1,141 +1,60 @@
-# OptiMind AI (Cloud AI Platform)
+# OptiMind AI
 
-Welcome to **OptiMind AI**, an agentic developer platform built to inspect, profile, recommend, optimize, and bundle AI models for deployment on modern Arm-based Cloud CPU architectures (such as **AWS Graviton**, **Microsoft Cobalt 100**, and **Google Cloud Axion**).
+<p align="center">
+  <img src="frontend/public/logo.png" alt="OptiMind AI Logo" width="320" />
+</p>
 
-This platform acts as an end-to-end sandbox enabling developers to compile models (e.g., Llama, Phi, Gemma, BERT) to high-performance runtimes (ONNX Runtime, Llama.cpp) with dynamic quantization, analyze cost-efficiency metrics, and instantly generate production-ready cloud deployment packages.
+## 📝 Short Description
 
----
+**OptiMind AI** is an agentic developer platform built to inspect, profile, recommend, optimize, and package Machine Learning models for high-performance deployment on modern Arm-based Cloud CPU architectures (such as **AWS Graviton**, **Microsoft Cobalt 100**, and **Google Cloud Axion**). 
 
-## 🚀 Key Features
-
-### 1. Zero-Lag Model Selection & Inspection
-* Search and load any Hugging Face Repository instantly.
-* **Metadata Lazy-Loading**: Recommendations fetch only the `config.json` header (taking milliseconds and using <2KB) to identify attention heads, layers, and architectures. Heavy model weights are deferred to the actual compilation stage to preserve system memory and network bandwidth.
-
-### 2. AI Recommendation Heuristic
-* Recommends the optimal inference engine based on architecture (e.g., **ONNX Runtime** for Bert classification, **Llama.cpp** for Llama text-generation).
-* Recommends the most cost-efficient instance on AWS, Azure, or GCP.
-* Dynamically calculates **Estimated Hosting Costs** using real-world public cloud billing rates (e.g., AWS Graviton on-demand rates of \$48.96/mo).
-
-### 3. Dynamic Model-Aware Benchmarking
-* Features dynamic benchmarking simulations scaled realistically according to parameter sizes and runtime engines. 
-* Reflects realistic RAM savings (up to 75% for LLM INT4 quantization) and speedups (2x - 4x) with built-in model-specific variance.
-
-### 4. Bypassed Native Download Packages
-* Replaced programmatic Javascript links with native standard HTML anchors styled via shadcn/base-ui `buttonVariants`.
-* **Download PDF Report**: Generates a detailed audit of latency speedups and architecture details.
-* **Download Deployment ZIP**: Automatically bundles containerized deployment assets:
-  - Custom `Dockerfile` optimized for Arm CPU instruction sets.
-  - `docker-compose.yml` for multi-container orchestration.
-  - `nginx.conf` configured for request reverse-proxying.
-  - Kubernetes `deployment.yaml` and `service.yaml` manifests for hosting.
-* **Open HTML Report**: Opens a clean, responsive layout of the report inside a new tab.
+The platform bridges the gap between raw models on Hugging Face and optimized, containerized deployment pipelines using lightweight metadata parsing, heuristic recommendation algorithms, dynamic model-aware benchmarking, and 1-click cloud orchestration generation.
 
 ---
 
-## 🔍 How it Works (Under the Hood)
+## 🚀 Features
 
-OptiMind AI coordinates multiple backend services to analyze, optimize, benchmark, and deploy models. Here is a breakdown of the core workflows:
+* **Zero-Lag Model Discovery**: Search and load any public or gated Hugging Face repository instantly using lazy-loaded metadata (downloading only the `<2KB` `config.json` header).
+* **AI Recommendation Heuristics**: Automatically recommends the optimal runtime engine (ONNX Runtime, Llama.cpp) and cloud instance types based on estimated model memory footprints.
+* **Deterministic Benchmarking**: Computes realistic estimates for latency speedups, throughput (Tokens/sec), RAM utilization, and hosting costs.
+* **Multi-Stage Optimization Pipeline**: A sequential compiler state machine that quantizes weights (INT4/INT8), exports formats, packages deployment scripts, and generates executive audits.
+* **Pipeline Control**: Real-time optimization progress dashboard with an active connection `Cancel` mechanism using `AbortController` to abort operations gracefully.
+* **Enterprise Cloud Deployment Packs**: 1-click generation of custom Dockerfiles, Docker Compose files, Nginx reverse proxy configurations, and Kubernetes YAML manifests.
 
-### 1. Lazy-Loading Model Inspection
-When you query or select a model on the dashboard, the backend avoids downloading gigabytes of model weights:
-1. **`DownloadService.download_config_only`** is called. It uses Hugging Face's `hf_hub_download` to fetch **only** the `config.json` file.
-2. **`ModelIntelligence.inspect`** parses the `config.json` file to identify structural features:
-   - Attention heads, hidden layers, activation functions, and vocabulary size.
-   - It computes an `estimated_parameters_billion` field from the hidden layer dimensions.
-3. This allows the UI to display model metadata and run recommendations instantly without consuming network bandwidth or causing local system lag.
+---
 
-### 2. Heuristics & Recommender Engine
-Once model metadata is parsed, the recommender calculates the best hardware and backend:
-* **Backend Recommendation**: Recommends **ONNX Runtime** for classifier/encoder models (like BERT, RoBERTa) and **Llama.cpp** (using GGUF format) for autoregressive LLMs (like Llama, Phi, Gemma).
-* **Cloud VM Selection**: Calculates the RAM requirements based on model size. It matches smaller models (<4B parameters) to 4-core, 16GB Arm VMs (AWS `c8g.large`, Azure `Standard_D4ps_v6`, GCP `t2a-standard-4`) and scales up to larger VMs for heavier models.
-* **Cost Estimation**: Estimates monthly run-rates based on public on-demand pricing and compares it with comparable x86 instances to show average monthly savings.
+## 🏗️ Architecture Diagram
 
-### 3. The Multi-Stage Optimization Pipeline
-When you click **Start Optimization**, the `PipelineService` executes a sequential state machine:
 ```mermaid
-graph TD
-    A[Download Stage: Fetch Weights] --> B[Inspection Stage: Verify Layout]
-    B --> C[Recommendation Stage: Match Backend & VM]
-    C --> D[Optimization Stage: Quantization & ONNX Export]
-    D --> E[Benchmark Stage: Profile Performance]
-    E --> F[Deployment Stage: Generate Manifests]
-    F --> G[Report Stage: Compile PDF & HTML]
+graph TB
+    subgraph Frontend [Next.js 15 App Workspace]
+        UI[Dashboard / Console UI]
+        State[Local Storage State]
+        Abort[AbortController Agent]
+    end
+
+    subgraph Backend [FastAPI Application Server]
+        API[REST API Routers]
+        Pipe[Pipeline State Machine]
+        Rec[Recommender Engine]
+        Bench[Benchmark Engine]
+        Gen[Deployment Code Gen]
+    end
+
+    subgraph External [External Interfaces]
+        HF[Hugging Face Hub API]
+        Cloud[Cloud Provider Pricing API]
+    end
+
+    UI -->|1. Request Metadata| API
+    API -->|2. Fetch config.json| HF
+    API -->|3. Evaluate Metrics| Rec
+    Rec -->|4. Query Instance Costs| Cloud
+    UI -->|5. Run Pipeline| Pipe
+    Pipe -->|6. Compile & Quantize| Bench
+    Pipe -->|7. Generate Configs| Gen
+    Abort -->|Cancel Signal| API
 ```
-* **Fail-Safe Fallback**: If the Hugging Face weights download fails or is gated, the pipeline automatically shifts to **simulated optimization mode**, completing the pipeline and outputting configuration packages without throwing crash errors.
-* **User Cancellation**: Staged via an `AbortController` on the frontend, users can cancel the execution at any time, terminating the HTTP connection and clearing the progress trackers.
-
-### 4. Dynamic Model-Aware Benchmarking
-Rather than using static mock numbers, the benchmarking engine (`BenchmarkRunner.generate_dynamic_results`) generates realistic performance metrics:
-* **Baseline Speed & Memory**: Scales based on parameter size (e.g. a 3B parameter model starts with a larger memory footprint and latency than a 110M parameter encoder model).
-* **Framework Speedups**: ONNX Runtime and Llama.cpp optimization multipliers are applied to latency and throughput (e.g., Llama.cpp with 4-bit quantization yields a ~75% reduction in memory and a ~3x speedup).
-* **Deterministic Jitter**: Uses a hashing function on the `model_id` to apply realistic, unique performance variations so that distinct models display different numbers.
-
-### 5. Automated Deployment Generators
-The final stage of the pipeline generates standard enterprise deployment files:
-* **Dockerfile**: Sets up an Arm-compatible base image (e.g., using `ubuntu` or framework CPU wheels) configured for optimum CPU instruction sets.
-* **Docker Compose**: Wires the FastAPI inference container alongside a pre-configured Nginx load balancer.
-* **Kubernetes Manifests**: Includes `deployment.yaml` and `service.yaml` configured to scale pods horizontally across cloud Arm node pools.
-
----
-
-## 🛠️ Tech Stack
-
-### Frontend (Next.js)
-* **Core**: Next.js 15 (App Router), React, TypeScript.
-* **Styling**: Tailwind CSS & Base-UI/Radix primitives.
-* **Icons**: Lucide React.
-
-### Backend (FastAPI)
-* **Framework**: FastAPI (Python 3.13), Uvicorn.
-* **Libraries**: Hugging Face Hub (downloader/exporter), Optimum, Pydantic.
-* **Telemetry**: Native profiling, memory measurement, and performance estimation.
-
----
-
-## ⚙️ How to Get Started
-
-### Prerequisites
-* **Node.js** (v18 or higher)
-* **Python** (v3.10 - v3.13)
-
-### 1. Run the Backend
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
-2. Create and activate a Python virtual environment:
-   ```bash
-   python -m venv venv
-   # On Windows:
-   .\venv\Scripts\activate
-   # On macOS/Linux:
-   source venv/bin/activate
-   ```
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. Run the development server with reload enabled:
-   ```bash
-   uvicorn app.main:app --reload
-   ```
-   *The backend will boot up at `http://127.0.0.1:8000`.*
-
-### 2. Run the Frontend
-1. Navigate to the frontend directory:
-   ```bash
-   cd ../frontend
-   ```
-2. Install Node packages:
-   ```bash
-   npm install
-   ```
-3. Boot the development server:
-   ```bash
-   npm run dev
-   ```
-   *The frontend dashboard will load at `http://localhost:3000`.*
 
 ---
 
@@ -172,3 +91,132 @@ The final stage of the pipeline generates standard enterprise deployment files:
 │   └── tsconfig.json           # TypeScript configuration
 └── .gitignore                  # Monorepo build and binary exclusion file
 ```
+
+---
+
+## 🔍 How It Works
+
+### 1. Fast Metadata Acquisition
+When you input a Hugging Face model repository (e.g., `meta-llama/Llama-3.2-3B-Instruct`), the API calls `DownloadService.download_config_only`. This retrieves *only* the `config.json` header metadata, preventing gigabytes of weights from downloading during the exploration phase. The parser extracts core model settings (architecture type, attention heads, number of layers) to calculate the estimated parameters.
+
+### 2. Heuristic Backend & VM Matching
+* **Engine Selection**: Encoder models (e.g. BERT classification) are assigned the **ONNX Runtime** compilation backend. Decoder models (e.g. LLM text generation) are assigned the **Llama.cpp** (GGUF) framework.
+* **VM Sizing**: Small models (<4B params) are matched with 4-core, 16GB Arm VMs (AWS `c8g.large`, GCP `t2a-standard-4`, Azure `Standard_D4ps_v6`). Medium models (4B-8B params) scale to 8-core instances.
+* **Costing**: Establishes run-rates using current regional cloud billing metrics, displaying potential cost reductions compared to traditional x86 workloads.
+
+### 3. Pipeline State Machine
+Upon activation, the pipeline runs sequentially through stages:
+1. **DownloadStage**: Downloads full model weights (safetensors). If the model is restricted/gated or download fails, it gracefully transitions to simulated optimization mode to prevent pipeline failure.
+2. **InspectionStage**: Audits structural details.
+3. **RecommendationStage**: Computes cloud and runtime matching.
+4. **OptimizationStage**: Converts representation formats and applies dynamic INT4/INT8 quantization passes.
+5. **BenchmarkStage**: Runs profiling tasks comparing optimized vs. original metrics.
+6. **DeploymentStage**: Assembles cloud and container deployment packs.
+7. **ReportStage**: Commits analytics to PDF and HTML format.
+
+---
+
+## 🛠️ Tech Stack
+
+* **Frontend**: Next.js 15 (App Router), TypeScript, React, Tailwind CSS, Lucide icons, Radix UI.
+* **Backend**: FastAPI (Python 3.13), Uvicorn, Hugging Face Hub Client, Optimum API, Pydantic, ReportLab.
+
+---
+
+## ⚙️ Installation
+
+### Prerequisites
+* **Node.js** (v18 or higher)
+* **Python** (v3.10 - v3.13)
+
+### Setup Steps
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Nimalan07/optimind-ai.git
+   cd optimind-ai
+   ```
+2. Set up the Python virtual environment:
+   ```bash
+   cd backend
+   python -m venv venv
+   # Windows:
+   .\venv\Scripts\activate
+   # macOS/Linux:
+   source venv/bin/activate
+   ```
+3. Install backend dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Install frontend dependencies:
+   ```bash
+   cd ../frontend
+   npm install
+   ```
+
+---
+
+## 💡 Usage
+
+1. **Start the Backend server**:
+   ```bash
+   cd backend
+   uvicorn app.main:app --reload
+   ```
+   *FastAPI will run at `http://127.0.0.1:8000`.*
+2. **Start the Frontend client**:
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+   *Next.js will run at `http://localhost:3000`.*
+3. **Optimize a Model**:
+   * Navigate to `http://localhost:3000/workspace`.
+   * Input any Hugging Face model repository and click **Inspect**.
+   * Review recommended hardware, estimated hosting cost, and optimization scores.
+   * Click **Start Optimization**.
+   * View live pipeline stages in the console UI (or click **Cancel Optimization** to abort the run).
+   * Review benchmark comparison charts and download your **PDF Report** or **Deployment Package**.
+
+---
+
+## 📡 API Reference
+
+### System
+* `GET /`: Returns root welcome message and API version.
+* `GET /health`: Returns service health status.
+
+### Recommendations
+* `POST /recommend/{model_id}`: Fetches `config.json` metadata, inspects the architecture, and returns recommended runtime configurations, cloud instance details, hosting costs, and estimated scores.
+
+### Pipeline
+* `POST /pipeline/run/{model_id}`: Triggers the multi-stage pipeline. Run is fully stateful and tracked. Supports cancellation signals via client connection drop.
+
+### Artifacts & Reports
+* `GET /reports/{report_id}/download`: Serves generated PDF reports.
+* `GET /deployment/download/{job_id}`: Serves packaged `.zip` deployment archives containing Dockerfiles and Kubernetes manifests.
+
+---
+
+## 📸 Screenshots
+
+### Logo Branding
+![Logo Banner](frontend/public/logo.png)
+
+### Dashboard Interface
+*The workspace presents a clean, glassmorphic layout displaying telemetry side-by-side with optimization execution status.*
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] Support additional compiler runtimes (TensorRT-LLM, ExecuTorch).
+- [ ] Implement support for multi-GPU cloud instance clustering recommendations.
+- [ ] Connect with local physical hardware profiling agents (e.g. Raspberry Pi clusters, on-prem ARM nodes).
+- [ ] Add global multi-region cloud pricing trackers for live spot-instance cost mitigation.
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**. See the LICENSE file for details.
