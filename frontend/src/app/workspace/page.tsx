@@ -65,28 +65,28 @@ export default function Workspace() {
 
           <div className="grid grid-cols-4 gap-6 mt-10">
             <div className="border rounded-xl p-6 shadow-sm bg-white/50 backdrop-blur-md">
-              <h2 className="text-sm font-medium text-gray-500">Total Models</h2>
+              <h2 className="text-sm font-medium text-gray-500">Models Optimized</h2>
               <p className="text-4xl font-extrabold mt-2 text-gray-900">
                 {stats.totalModels}
               </p>
             </div>
 
             <div className="border rounded-xl p-6 shadow-sm bg-white/50 backdrop-blur-md">
-              <h2 className="text-sm font-medium text-gray-500">Benchmarks</h2>
+              <h2 className="text-sm font-medium text-gray-500">Benchmark Runs</h2>
               <p className="text-4xl font-extrabold mt-2 text-gray-900">
                 {stats.benchmarks}
               </p>
             </div>
 
             <div className="border rounded-xl p-6 shadow-sm bg-white/50 backdrop-blur-md">
-              <h2 className="text-sm font-medium text-gray-500">Optimizations</h2>
+              <h2 className="text-sm font-medium text-gray-500">Optimization Jobs</h2>
               <p className="text-4xl font-extrabold mt-2 text-gray-900">
                 {stats.optimizations}
               </p>
             </div>
 
             <div className="border rounded-xl p-6 shadow-sm bg-white/50 backdrop-blur-md">
-              <h2 className="text-sm font-medium text-gray-500">Reports</h2>
+              <h2 className="text-sm font-medium text-gray-500">Reports Generated</h2>
               <p className="text-4xl font-extrabold mt-2 text-gray-900">
                 {stats.reports}
               </p>
