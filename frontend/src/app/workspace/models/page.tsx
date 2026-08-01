@@ -48,6 +48,7 @@ export default function ModelsPage() {
 
   const handleSelect = (modelId: string) => {
     localStorage.setItem("selectedModel", modelId);
+    localStorage.removeItem("pipelineResult");
     setSelectedModel(modelId);
     setStatusMsg(`Selected model: ${modelId}`);
   };
@@ -102,6 +103,7 @@ export default function ModelsPage() {
               </div>
               <Button size="sm" variant="outline" onClick={() => {
                 localStorage.removeItem("selectedModel");
+                localStorage.removeItem("pipelineResult");
                 setSelectedModel("");
               }}>Clear</Button>
             </div>
