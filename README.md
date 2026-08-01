@@ -1,5 +1,7 @@
 # OptiMind AI
 
+![Python](https://img.shields.io/badge/Python-3.13-blue) ![FastAPI](https://img.shields.io/badge/FastAPI-0.115-green) ![Next.js](https://img.shields.io/badge/Next.js-15-black) ![License](https://img.shields.io/badge/License-MIT-yellow) ![Platform](https://img.shields.io/badge/Platform-Arm%20Cloud-success) ![ONNX](https://img.shields.io/badge/ONNX-Runtime-blueviolet)
+
 **Author:** NIMALAN MANI M
 
 ## 📝 Short Description
