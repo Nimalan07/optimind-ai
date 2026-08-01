@@ -58,6 +58,45 @@ graph TB
 
 ---
 
+## 📸 Workflow Screenshots
+
+Here is the step-by-step optimization workflow of **OptiMind AI**:
+
+### 1. Landing Page
+![Landing Page](docs/screenshots/1_landing.png)
+
+---
+
+### 2. Model Selection
+![Model Selection](docs/screenshots/2_model_selection.png)
+
+---
+
+### 3. Optimization Setup
+![Optimization Setup](docs/screenshots/3_optimization.png)
+
+---
+
+### 4. AI Recommendation Heuristic
+![AI Recommendation](docs/screenshots/4_ai_recommendation.png)
+
+---
+
+### 5. Benchmark Dashboard
+![Benchmark Dashboard](docs/screenshots/5_benchmark_dashboard.png)
+
+---
+
+### 6. Benchmark Comparison
+![Benchmark Comparison](docs/screenshots/6_benchmark_comparison.png)
+
+---
+
+### 7. Generated Reports
+![Generated Reports](docs/screenshots/7_reports.png)
+
+---
+
 ## 📂 Repository Layout
 
 ```text
@@ -90,44 +129,6 @@ graph TB
 │   ├── package.json            # Frontend dependencies
 │   └── tsconfig.json           # TypeScript configuration
 └── .gitignore                  # Monorepo build and binary exclusion file
-```
-
----
-
-## 🔄 Application User Flow
-
-```text
-1. Landing Page
-       ↓
-2. Model Selection
-       ↓
-3. Optimization
-       ↓
-4. AI Recommendation
-       ↓
-5. Benchmark Dashboard
-       ↓
-6. Benchmark Comparison
-       ↓
-7. Reports
-```
-
-```mermaid
-graph TD
-    A["1. Landing Page"] --> B["2. Model Selection"]
-    B --> C["3. Optimization"]
-    C --> D["4. AI Recommendation"]
-    D --> E["5. Benchmark Dashboard"]
-    E --> F["6. Benchmark Comparison"]
-    F --> G["7. Reports"]
-
-    style A fill:#f1f5f9,stroke:#64748b,stroke-width:2px
-    style B fill:#f1f5f9,stroke:#64748b,stroke-width:2px
-    style C fill:#f1f5f9,stroke:#64748b,stroke-width:2px
-    style D fill:#f1f5f9,stroke:#64748b,stroke-width:2px
-    style E fill:#f1f5f9,stroke:#64748b,stroke-width:2px
-    style F fill:#f1f5f9,stroke:#64748b,stroke-width:2px
-    style G fill:#dcfce7,stroke:#16a34a,stroke-width:2px
 ```
 
 ---
