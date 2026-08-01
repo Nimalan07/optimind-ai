@@ -220,4 +220,10 @@ For production environments, you can run the entire platform (Frontend + Backend
 - [ ] Connect with local physical hardware profiling agents (e.g. Raspberry Pi clusters, on-prem ARM nodes).
 - [ ] Add global multi-region cloud pricing trackers for live spot-instance cost mitigation.
 
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 
