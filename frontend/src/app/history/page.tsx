@@ -39,14 +39,6 @@ const initialHistory = [
     memory: "3.1 GB",
     status: "Completed",
   },
-  {
-    id: 3,
-    model: "Qwen 2.5",
-    optimization: "INT8",
-    latency: "2.0 s",
-    memory: "2.8 GB",
-    status: "Running",
-  },
 ];
 
 export default function HistoryPage() {
@@ -55,7 +47,9 @@ export default function HistoryPage() {
   useEffect(() => {
     const saved = localStorage.getItem("optimindHistory");
     if (saved) {
-      setHistoryList(JSON.parse(saved));
+      const parsed = JSON.parse(saved).filter((item: any) => item.status !== "Running" && item.model !== "Qwen 2.5");
+      setHistoryList(parsed);
+      localStorage.setItem("optimindHistory", JSON.stringify(parsed));
     } else {
       localStorage.setItem("optimindHistory", JSON.stringify(initialHistory));
       setHistoryList(initialHistory);

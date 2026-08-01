@@ -21,14 +21,6 @@ const initialHistory = [
     memory: "3.1 GB",
     status: "Completed",
   },
-  {
-    id: 3,
-    model: "Qwen 2.5",
-    optimization: "INT8",
-    latency: "2.0 s",
-    memory: "2.8 GB",
-    status: "Running",
-  },
 ];
 
 export default function Workspace() {
@@ -41,17 +33,16 @@ export default function Workspace() {
 
   useEffect(() => {
     const saved = localStorage.getItem("optimindHistory");
-    const historyList = saved ? JSON.parse(saved) : initialHistory;
+    let historyList = saved ? JSON.parse(saved) : initialHistory;
     
-    if (!saved) {
-      localStorage.setItem("optimindHistory", JSON.stringify(initialHistory));
-    }
+    // Clean up any running/stale items (like Qwen 2.5)
+    historyList = historyList.filter((item: any) => item.status !== "Running" && item.model !== "Qwen 2.5");
+    localStorage.setItem("optimindHistory", JSON.stringify(historyList));
 
     // Calculate statistics
     const uniqueModels = new Set(historyList.map((item: any) => item.model)).size;
     const completedCount = historyList.filter((item: any) => item.status === "Completed").length;
     const totalRuns = historyList.length;
-    // Assume all completed runs have a report generated
     const reportCount = completedCount;
 
     setStats({
