@@ -98,6 +98,40 @@ export default function OptimizePage() {
       if (res.ok) {
         const result = await res.json();
         localStorage.setItem("pipelineResult", JSON.stringify(result));
+        
+        try {
+          const saved = localStorage.getItem("optimindHistory");
+          const historyList = saved ? JSON.parse(saved) : [
+            { id: 1, model: "Llama 3.2 3B", optimization: "INT4 + GGUF", latency: "1.6 s", memory: "2.5 GB", status: "Completed" },
+            { id: 2, model: "Gemma 2B", optimization: "ONNX", latency: "2.2 s", memory: "3.1 GB", status: "Completed" },
+            { id: 3, model: "Qwen 2.5", optimization: "INT8", latency: "2.0 s", memory: "2.8 GB", status: "Running" }
+          ];
+
+          const optType = result.optimization?.[0]?.backend || "ONNX";
+          const benchmarkAfter = result.benchmark?.after || {};
+          const dynamicLatency = benchmarkAfter.latency?.average_ms 
+            ? `${(benchmarkAfter.latency.average_ms / 1000).toFixed(1)} s` 
+            : "1.8 s";
+          const dynamicMemory = benchmarkAfter.memory?.rss_mb 
+            ? `${(benchmarkAfter.memory.rss_mb / 1024).toFixed(1)} GB` 
+            : "2.2 GB";
+
+          const newEntry = {
+            id: Date.now(),
+            model: modelId,
+            optimization: optType,
+            latency: dynamicLatency,
+            memory: dynamicMemory,
+            status: "Completed"
+          };
+
+          const filtered = historyList.filter((item: any) => item.model !== modelId);
+          filtered.push(newEntry);
+          localStorage.setItem("optimindHistory", JSON.stringify(filtered));
+        } catch (err) {
+          console.error("Failed to save history:", err);
+        }
+
         setCurrentStage("Complete!");
         setProgressMsg("Redirecting to Benchmark dashboard...");
         setTimeout(() => {

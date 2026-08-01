@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Sidebar from "@/components/layout/Sidebar";
 
@@ -21,7 +22,7 @@ import {
 
 import { Badge } from "@/components/ui/badge";
 
-const history = [
+const initialHistory = [
   {
     id: 1,
     model: "Llama 3.2 3B",
@@ -49,6 +50,18 @@ const history = [
 ];
 
 export default function HistoryPage() {
+  const [historyList, setHistoryList] = useState<any[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("optimindHistory");
+    if (saved) {
+      setHistoryList(JSON.parse(saved));
+    } else {
+      localStorage.setItem("optimindHistory", JSON.stringify(initialHistory));
+      setHistoryList(initialHistory);
+    }
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -57,63 +70,36 @@ export default function HistoryPage() {
         <Sidebar />
 
         <main className="flex-1 p-10">
-
-          <h1 className="text-4xl font-bold">
-            Benchmark History
-          </h1>
-
+          <h1 className="text-4xl font-bold">Benchmark History</h1>
           <p className="text-gray-500 mt-2">
             View previous optimization runs.
           </p>
 
           <Card className="mt-8">
-
             <CardHeader>
-
-              <CardTitle>
-                Previous Benchmarks
-              </CardTitle>
-
+              <CardTitle>Previous Benchmarks</CardTitle>
             </CardHeader>
 
             <CardContent>
-
               <Table>
-
                 <TableHeader>
-
                   <TableRow>
-
                     <TableHead>Model</TableHead>
-
                     <TableHead>Optimization</TableHead>
-
                     <TableHead>Latency</TableHead>
-
                     <TableHead>Memory</TableHead>
-
                     <TableHead>Status</TableHead>
-
                   </TableRow>
-
                 </TableHeader>
 
                 <TableBody>
-
-                  {history.map((item) => (
-
+                  {historyList.map((item) => (
                     <TableRow key={item.id}>
-
-                      <TableCell>{item.model}</TableCell>
-
+                      <TableCell className="font-medium">{item.model}</TableCell>
                       <TableCell>{item.optimization}</TableCell>
-
                       <TableCell>{item.latency}</TableCell>
-
                       <TableCell>{item.memory}</TableCell>
-
                       <TableCell>
-
                         <Badge
                           variant={
                             item.status === "Completed"
@@ -123,23 +109,14 @@ export default function HistoryPage() {
                         >
                           {item.status}
                         </Badge>
-
                       </TableCell>
-
                     </TableRow>
-
                   ))}
-
                 </TableBody>
-
               </Table>
-
             </CardContent>
-
           </Card>
-
         </main>
-
       </div>
     </>
   );
