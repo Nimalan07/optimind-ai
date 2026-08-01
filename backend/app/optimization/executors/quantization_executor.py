@@ -1,17 +1,16 @@
 from pathlib import Path
 
-import onnx
-from onnx import shape_inference
-from onnxruntime.quantization import (
-    QuantType,
-    quantize_dynamic,
-)
-
 
 class QuantizationExecutor:
 
     @staticmethod
     def execute(onnx_model_path: str):
+        import onnx
+        from onnx import shape_inference
+        from onnxruntime.quantization import (
+            QuantType,
+            quantize_dynamic,
+        )
 
         onnx_model = Path(onnx_model_path)
 
