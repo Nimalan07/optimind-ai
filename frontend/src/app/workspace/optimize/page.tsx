@@ -22,8 +22,11 @@ export default function OptimizePage() {
   const router = useRouter();
 
   useEffect(() => {
-    localStorage.removeItem("selectedModel");
-    setModelId("");
+    const savedModel = localStorage.getItem("selectedModel");
+    if (savedModel) {
+      setModelId(savedModel);
+      fetchRecommendation(savedModel);
+    }
   }, []);
 
   const fetchRecommendation = async (id: string) => {
@@ -169,51 +172,12 @@ export default function OptimizePage() {
             Select optimization techniques before benchmarking.
           </p>
 
-          {/* Model Selector */}
-          <Card className="mt-8">
-            <CardHeader>
-              <CardTitle>Select Model to Optimize</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex gap-4 items-center">
-                <select
-                  value={modelId}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    setModelId(val);
-                    if (val) {
-                      localStorage.setItem("selectedModel", val);
-                      fetchRecommendation(val);
-                    } else {
-                      localStorage.removeItem("selectedModel");
-                      setRecommendation(null);
-                    }
-                  }}
-                  className="w-full max-w-md p-3 border rounded-lg bg-white shadow-sm outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
-                >
-                  <option value="">-- Choose a Model --</option>
-                  <option value="meta-llama/Llama-3.2-3B-Instruct">Llama 3.2 3B (meta-llama/Llama-3.2-3B-Instruct)</option>
-                  <option value="google/gemma-2b-it">Gemma 2B (google/gemma-2b-it)</option>
-                  <option value="Qwen/Qwen2.5-3B-Instruct">Qwen 2.5 3B (Qwen/Qwen2.5-3B-Instruct)</option>
-                  <option value="microsoft/Phi-3-mini-4k-instruct">Phi-3 Mini (microsoft/Phi-3-mini-4k-instruct)</option>
-                </select>
-                {modelId && (
-                  <Button 
-                    variant="outline" 
-                    onClick={() => {
-                      setModelId("");
-                      localStorage.removeItem("selectedModel");
-                      setRecommendation(null);
-                    }}
-                  >
-                    Clear Selection
-                  </Button>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-
-          {modelId && (
+          {!modelId ? (
+            <div className="mt-8 p-6 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-700">
+              <p className="font-semibold">No active model selected.</p>
+              <p className="mt-1">Please select a model on the Models page first before proceeding.</p>
+            </div>
+          ) : (
             <>
               {/* Selected Model */}
               <Card className="mt-8">
