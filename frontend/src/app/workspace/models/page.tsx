@@ -42,8 +42,10 @@ export default function ModelsPage() {
   const [statusMsg, setStatusMsg] = useState<string>("");
 
   useEffect(() => {
-    localStorage.removeItem("selectedModel");
-    setSelectedModel("");
+    const saved = localStorage.getItem("selectedModel");
+    if (saved) {
+      setSelectedModel(saved);
+    }
   }, []);
 
   const handleSelect = (modelId: string) => {
