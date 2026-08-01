@@ -1,11 +1,10 @@
-from transformers import (
-    AutoModel,
-    AutoModelForCausalLM,
-    AutoModelForSeq2SeqLM,
-    WhisperModel,
-)
-
 def load_model(model_path, inspection):
+    from transformers import (
+        AutoModel,
+        AutoModelForCausalLM,
+        AutoModelForSeq2SeqLM,
+        WhisperModel,
+    )
 
     arch = inspection["architecture"].lower()
 

@@ -1,5 +1,3 @@
-from huggingface_hub import snapshot_download
-
 from app.download.strategy import DownloadStrategy
 
 
@@ -54,6 +52,7 @@ class ModelDownloader:
         backend="pytorch"
 
     ):
+        from huggingface_hub import snapshot_download
 
         profile = DownloadStrategy.get_profile(
 

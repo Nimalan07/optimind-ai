@@ -3,8 +3,6 @@ import time
 from pathlib import Path
 
 import psutil
-import torch
-from transformers import AutoModel, AutoTokenizer
 
 from app.benchmark.comparison.metrics import BenchmarkMetrics
 
@@ -13,6 +11,8 @@ class PyTorchRunner:
 
     @staticmethod
     def run(model_path: str):
+        import torch
+        from transformers import AutoModel, AutoTokenizer
 
         process = psutil.Process(os.getpid())
 

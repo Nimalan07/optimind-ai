@@ -4,9 +4,7 @@ from app.benchmark.throughput import ThroughputBenchmark
 from app.benchmark.memory import MemoryBenchmark
 from app.benchmark.model_size import ModelSizeBenchmark
 
-from app.benchmark.runners.pytorch_runner import PyTorchRunner
-from app.benchmark.runners.onnx_runner import ONNXRunner
-from app.benchmark.runners.llamacpp_runner import LlamaCppRunner
+
 
 
 class BenchmarkRunner:
@@ -134,12 +132,15 @@ class BenchmarkRunner:
         backend = backend.lower()
 
         if backend == "pytorch":
+            from app.benchmark.runners.pytorch_runner import PyTorchRunner
             return PyTorchRunner.run(model_path)
 
         elif backend in ["onnx runtime", "onnxruntime"]:
+            from app.benchmark.runners.onnx_runner import ONNXRunner
             return ONNXRunner.run(model_path)
 
         elif backend == "llama.cpp":
+            from app.benchmark.runners.llamacpp_runner import LlamaCppRunner
             return LlamaCppRunner.run(model_path)
 
         raise ValueError(f"Unsupported backend: {backend}")

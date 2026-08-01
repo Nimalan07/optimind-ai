@@ -2,7 +2,6 @@ import os
 import time
 
 import numpy as np
-import onnxruntime as ort
 import psutil
 
 from app.benchmark.comparison.metrics import BenchmarkMetrics
@@ -12,6 +11,7 @@ class ONNXRunner:
 
     @staticmethod
     def run(model_path: str):
+        import onnxruntime as ort
 
         process = psutil.Process(os.getpid())
 
