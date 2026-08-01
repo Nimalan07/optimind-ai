@@ -186,29 +186,10 @@ For production environments, you can run the entire platform (Frontend + Backend
 3. Access the services:
    * **Frontend UI**: `http://localhost:3000`
    * **Backend API**: `http://localhost:8000`
-### 🌐 Cloud Deployment (Vercel & Render)
-You can deploy the entire platform for free by hosting the frontend on Vercel and the backend on Render:
-
-#### 1. Deploy the Backend (FastAPI) on Render
-1. Sign up on [Render](https://render.com) and link your GitHub repository.
-2. Create a new **Web Service**.
-3. Set the following configuration options:
-   * **Root Directory**: `backend`
-   * **Runtime**: `Python`
-   * **Build Command**: `pip install -r requirements.txt`
-   * **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-4. Click **Deploy**. Render will allocate a public endpoint (e.g., `https://optimind-api.onrender.com`).
-
-#### 2. Deploy the Frontend (Next.js) on Vercel
-1. Sign up on [Vercel](https://vercel.com) and link your GitHub repository.
-2. Create a new project and import your `optimind-ai` repository.
-3. Configure the following parameters:
-   * **Root Directory**: Select `frontend`
-   * **Framework Preset**: `Next.js` (auto-detected)
-4. Add this **Environment Variable**:
-   * **Key**: `NEXT_PUBLIC_API_URL`
-   * **Value**: Your Render live API URL (e.g., `https://optimind-api.onrender.com`)
-5. Click **Deploy**. Vercel will host the dashboard and provide a public URL.
+4. To stop the services:
+   ```bash
+   docker-compose down
+   ```
 
 ---
 
