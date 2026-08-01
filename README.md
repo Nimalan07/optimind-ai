@@ -94,6 +94,44 @@ graph TB
 
 ---
 
+## 🔄 Application User Flow
+
+```text
+1. Landing Page
+       ↓
+2. Model Selection
+       ↓
+3. Optimization
+       ↓
+4. AI Recommendation
+       ↓
+5. Benchmark Dashboard
+       ↓
+6. Benchmark Comparison
+       ↓
+7. Reports
+```
+
+```mermaid
+graph TD
+    A["1. Landing Page"] --> B["2. Model Selection"]
+    B --> C["3. Optimization"]
+    C --> D["4. AI Recommendation"]
+    D --> E["5. Benchmark Dashboard"]
+    E --> F["6. Benchmark Comparison"]
+    F --> G["7. Reports"]
+
+    style A fill:#f1f5f9,stroke:#64748b,stroke-width:2px
+    style B fill:#f1f5f9,stroke:#64748b,stroke-width:2px
+    style C fill:#f1f5f9,stroke:#64748b,stroke-width:2px
+    style D fill:#f1f5f9,stroke:#64748b,stroke-width:2px
+    style E fill:#f1f5f9,stroke:#64748b,stroke-width:2px
+    style F fill:#f1f5f9,stroke:#64748b,stroke-width:2px
+    style G fill:#dcfce7,stroke:#16a34a,stroke-width:2px
+```
+
+---
+
 ## 🔍 How It Works
 
 ### 1. Fast Metadata Acquisition
